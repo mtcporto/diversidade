@@ -38,6 +38,7 @@ import { archiveCommunity, getCommunities } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 interface CommunityTableProps {
   initialCommunities: Community[];
