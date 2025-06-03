@@ -1,6 +1,6 @@
 "use client";
 
-import *import type { Community, CommunityCategory } from "@/types";
+import type { Community, CommunityCategory } from "@/types";
 import { communityCategories } from "@/types";
 import {
   getCoreRowModel,
