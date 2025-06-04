@@ -27,11 +27,13 @@ export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapPro
   return (
     <MapContainer
         center={position}
-        zoom={13}
-        scrollWheelZoom={false}
+        zoom={13} // Nível de zoom fixo para visualização local
+        scrollWheelZoom={false} // Desabilita zoom com o scroll do mouse
+        doubleClickZoom={false} // Desabilita zoom com duplo clique
+        touchZoom={false} // Desabilita zoom por toque (mobile)
+        zoomControl={false} // Remove os botões de controle de zoom +/-
+        attributionControl={false} // Remove a atribuição para um visual mais limpo no mini mapa
         style={{ height: '100%', width: '100%' }}
-        attributionControl={false}
-        zoomControl={false}
         className="rounded-md"
     >
       <TileLayer
@@ -47,3 +49,4 @@ export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapPro
     </MapContainer>
   );
 }
+

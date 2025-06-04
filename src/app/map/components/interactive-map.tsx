@@ -18,7 +18,9 @@ interface InteractiveMapProps {
 }
 
 const BRAZIL_CENTER: L.LatLngExpression = [-14.2350, -51.9253];
-const DEFAULT_ZOOM = 4;
+const INITIAL_ZOOM = 4; // Zoom inicial para mostrar o Brasil
+const MIN_ZOOM_LEVEL = 4; // Zoom mínimo para manter o foco no Brasil
+const MAX_ZOOM_LEVEL = 13; // Zoom máximo para evitar detalhes de rua/bairro
 
 export default function InteractiveMap({ communities }: InteractiveMapProps) {
   const [iconsReady, setIconsReady] = useState(false);
@@ -29,12 +31,26 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
       .catch(err => console.error("Failed to load leaflet-defaulticon-compatibility for InteractiveMap", err));
   }, []);
 
+  // Define o centro do mapa: se houver comunidades, usa a primeira; senão, o centro do Brasil.
   const mapCenter = communities.length > 0 && typeof communities[0].latitude === 'number' && typeof communities[0].longitude === 'number'
     ? [communities[0].latitude, communities[0].longitude] as L.LatLngExpression
     : BRAZIL_CENTER;
+  
+  // Se há comunidades, o zoom inicial pode ser um pouco maior que o do Brasil inteiro.
+  // Caso contrário, mantém o zoom inicial para o Brasil.
+  const currentInitialZoom = communities.length > 0 ? Math.max(INITIAL_ZOOM, 5) : INITIAL_ZOOM;
+
 
   return (
-    <MapContainer center={mapCenter} zoom={DEFAULT_ZOOM} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} className="rounded-lg">
+    <MapContainer 
+        center={mapCenter} 
+        zoom={currentInitialZoom} 
+        minZoom={MIN_ZOOM_LEVEL}
+        maxZoom={MAX_ZOOM_LEVEL}
+        scrollWheelZoom={true} 
+        style={{ height: '100%', width: '100%' }} 
+        className="rounded-lg"
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -64,3 +80,4 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
     </MapContainer>
   );
 }
+
