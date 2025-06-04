@@ -42,12 +42,12 @@ export default function HomePage() {
         </div>
         <div className="rounded-lg overflow-hidden shadow-xl">
           <Image
-            src="https://placehold.co/600x400.png"
-            alt="Representação da diversidade cultural"
+            src="https://images.pexels.com/photos/574111/pexels-photo-574111.jpeg"
+            alt="Mãos de diversas pessoas unidas representando comunidade e diversidade"
             width={600}
             height={400}
             className="w-full h-auto object-cover"
-            data-ai-hint="diversity culture"
+            data-ai-hint="community hands"
           />
         </div>
       </section>
