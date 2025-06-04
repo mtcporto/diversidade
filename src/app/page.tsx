@@ -42,12 +42,12 @@ export default function HomePage() {
         </div>
         <div className="rounded-lg overflow-hidden shadow-xl">
           <Image
-            src="https://images.pexels.com/photos/574111/pexels-photo-574111.jpeg"
-            alt="Mãos de diversas pessoas unidas representando comunidade e diversidade"
+            src="https://images.shutterstock.com/image-photo/yellow-chili-on-hand-region-600nw-713969461.jpg"
+            alt="Mão segurando uma pimenta amarela, representando a riqueza e diversidade cultural e agrícola."
             width={600}
             height={400}
             className="w-full h-auto object-cover"
-            data-ai-hint="community hands"
+            data-ai-hint="chili hand"
           />
         </div>
       </section>

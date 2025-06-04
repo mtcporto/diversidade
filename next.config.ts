@@ -29,6 +29,12 @@ const nextConfig: NextConfig = {
         hostname: 'images.pexels.com',
         port: '',
         pathname: '/**',
+      },
+      { // Added for Shutterstock Images
+        protocol: 'https',
+        hostname: 'images.shutterstock.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
