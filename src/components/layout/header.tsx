@@ -93,7 +93,7 @@ export default function Header() {
             </DropdownMenu>
           ) : (
             <div className="flex space-x-2">
-              <Button asChild variant="outline" size="sm" className="text-primary-foreground border-primary-foreground/50 hover:bg-primary-foreground/10 hover:text-accent">
+              <Button asChild variant="outline" size="sm" className="border-accent text-accent hover:bg-accent/10 hover:text-accent">
                 <Link href="/login">
                   <LogIn className="mr-1 h-4 w-4" /> Login
                 </Link>

@@ -11,7 +11,7 @@ import { UserPlus, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'; // Importação adicionada
 
 
 const signupSchema = z.object({
@@ -20,7 +20,7 @@ const signupSchema = z.object({
   confirmPassword: z.string().min(6, { message: "A confirmação da senha deve ter pelo menos 6 caracteres." }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "As senhas não coincidem.",
-  path: ["confirmPassword"], // path of error
+  path: ["confirmPassword"], 
 });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -39,7 +39,7 @@ export default function SignupPage() {
   });
 
   if (user) {
-    router.push('/'); // Redirect if already logged in
+    router.push('/'); 
     return null;
   }
 

@@ -11,6 +11,7 @@ import { LogIn, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation"; // Importação adicionada
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Por favor, insira um email válido." }),
@@ -33,7 +34,7 @@ const GoogleIcon = () => (
 
 export default function LoginPage() {
   const { signInWithEmail, signInWithGoogle, loading, user } = useAuth();
-  const router = useRouter(); // Assuming you have useRouter from 'next/navigation'
+  const router = useRouter(); 
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -44,7 +45,7 @@ export default function LoginPage() {
   });
 
   if (user) {
-    router.push('/'); // Redirect if already logged in
+    router.push('/'); 
     return null;
   }
 

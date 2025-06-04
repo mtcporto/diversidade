@@ -2,13 +2,11 @@
 import { getCommunityById } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Phone, Globe, MapPin, Edit3, Users, Palette, TreePine, Building } from 'lucide-react';
+import { Mail, Phone, Globe, MapPin, Users, Palette, TreePine, Building } from 'lucide-react';
 import type { CommunityCategory } from '@/types';
-import MiniMapClientLoader from '../components/mini-map-client-loader'; // Updated import
-
+import MiniMapClientLoader from '../components/mini-map-client-loader';
+import EditCommunityButton from '../components/edit-community-button'; // Import the client component
 
 const CategoryDisplay = ({ category }: { category: CommunityCategory }) => {
   const iconMap: Record<CommunityCategory, React.ReactNode> = {
@@ -114,11 +112,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
 
         </CardContent>
         <CardFooter className="border-t pt-6">
-          <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent/10 hover:text-accent">
-            <Link href={`/communities/${community.id}/edit`}>
-              <Edit3 className="mr-2 h-5 w-5" /> Editar Comunidade
-            </Link>
-          </Button>
+          <EditCommunityButton communityId={community.id} /> {/* Use the client component */}
         </CardFooter>
       </Card>
     </div>
