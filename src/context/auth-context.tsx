@@ -42,10 +42,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const handleAuthError = (error: FirebaseError, defaultMessage: string) => {
-    console.error("Authentication error:", error);
+    console.error("Authentication error details:", {
+      code: error.code,
+      message: error.message,
+      fullError: error,
+    });
 
-    // If user closes the popup, don't show a toast.
+    // If user closes the popup or cancels, don't show a toast.
     if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      // We don't show a toast because this is often a user-initiated action
+      // or an environmental issue like the one being investigated.
       return;
     }
 
