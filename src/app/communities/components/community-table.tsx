@@ -1,7 +1,8 @@
+
 "use client";
 
-import type { Community, CommunityCategoryPT } from "@/types"; // Updated import
-import { communityCategoriesPT } from "@/types"; // Updated import
+import type { Community, CommunityCategoryPT } from "@/types"; 
+import { communityCategoriesPT } from "@/types"; 
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -39,13 +40,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useAuth } from "@/context/auth-context"; // Import useAuth
 
 interface CommunityTableProps {
   initialCommunities: Community[];
   initialTotalCount: number;
   initialPage: number;
   searchQuery?: string;
-  searchCategory?: CommunityCategoryPT; // Updated type
+  searchCategory?: CommunityCategoryPT; 
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -65,12 +67,13 @@ export default function CommunityTable({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { user } = useAuth(); // Call useAuth at the top level
 
   const [communities, setCommunities] = useState<Community[]>(initialCommunities);
   const [totalCount, setTotalCount] = useState(initialTotalCount);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState(initialSearchQuery);
-  const [categoryFilter, setCategoryFilter] = useState<CommunityCategoryPT | undefined>(initialSearchCategory); // Updated type
+  const [categoryFilter, setCategoryFilter] = useState<CommunityCategoryPT | undefined>(initialSearchCategory); 
   
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -83,13 +86,13 @@ export default function CommunityTable({
     const success = await archiveCommunity(id);
     if (success) {
       toast({ title: "Comunidade arquivada", description: "A comunidade foi movida para os arquivos." });
-      fetchData(currentPage, searchTerm, categoryFilter); // Refresh data
+      fetchData(currentPage, searchTerm, categoryFilter); 
     } else {
       toast({ title: "Erro", description: "Não foi possível arquivar a comunidade.", variant: "destructive" });
     }
   };
   
-  const columns = useMemo(() => getColumns(handleArchive), [handleArchive]);
+  const columns = useMemo(() => getColumns(handleArchive, user), [handleArchive, user]); // Pass user to getColumns and add user to dependencies
 
   const table = useReactTable({
     data: communities,
@@ -120,7 +123,7 @@ export default function CommunityTable({
     globalFilterFn: fuzzyFilter,
   });
 
-  const fetchData = async (page: number, term: string, category?: CommunityCategoryPT) => { // Updated type
+  const fetchData = async (page: number, term: string, category?: CommunityCategoryPT) => { 
     const { communities: newCommunities, totalCount: newTotalCount } = await getCommunities(term, category, page, pageSize);
     setCommunities(newCommunities);
     setTotalCount(newTotalCount);
@@ -136,7 +139,7 @@ export default function CommunityTable({
   useEffect(() => {
     const urlPage = Number(searchParams.get('page')) || 1;
     const urlQuery = searchParams.get('query') || '';
-    const urlCategory = searchParams.get('category') as CommunityCategoryPT | undefined; // Updated type
+    const urlCategory = searchParams.get('category') as CommunityCategoryPT | undefined; 
 
     if (urlPage !== currentPage || urlQuery !== searchTerm || urlCategory !== categoryFilter) {
       setCurrentPage(urlPage);
@@ -144,7 +147,7 @@ export default function CommunityTable({
       setCategoryFilter(urlCategory);
       fetchData(urlPage, urlQuery, urlCategory);
     }
-  }, [searchParams]);
+  }, [searchParams, currentPage, searchTerm, categoryFilter]); // Added dependencies that were missing for correctness
 
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,7 +157,7 @@ export default function CommunityTable({
   };
 
   const handleCategoryChange = (value: string) => {
-    const newCategory = value === "all" ? undefined : value as CommunityCategoryPT; // Updated type
+    const newCategory = value === "all" ? undefined : value as CommunityCategoryPT; 
     setCategoryFilter(newCategory);
     fetchData(1, searchTerm, newCategory);
   };
@@ -184,7 +187,7 @@ export default function CommunityTable({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as Categorias</SelectItem>
-            {communityCategoriesPT.map(cat => ( // Updated array
+            {communityCategoriesPT.map(cat => ( 
               <SelectItem key={cat} value={cat}>{cat}</SelectItem>
             ))}
           </SelectContent>

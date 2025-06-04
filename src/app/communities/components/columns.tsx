@@ -1,7 +1,8 @@
+
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Community, CommunityCategoryPT } from "@/types"; // Updated import
+import type { Community, CommunityCategoryPT } from "@/types"; 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,9 +15,9 @@ import {
 import { ArrowUpDown, MoreHorizontal, Eye, Edit3, Archive as ArchiveIcon, Users, Palette, TreePine, Building } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/context/auth-context"; 
+import type { User } from "firebase/auth"; // Import User type
 
-const CategoryIcon = ({ category }: { category: CommunityCategoryPT }) => { // Updated type
+const CategoryIcon = ({ category }: { category: CommunityCategoryPT }) => { 
   switch (category) {
     case 'Indígena': return <Users className="h-4 w-4 mr-2 text-primary" />;
     case 'Quilombola': return <Users className="h-4 w-4 mr-2 text-primary" />;
@@ -24,17 +25,15 @@ const CategoryIcon = ({ category }: { category: CommunityCategoryPT }) => { // U
     case 'Agrícola': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
     case 'Cultural': return <Building className="h-4 w-4 mr-2 text-accent" />;
     case 'Ambiental': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
-    default: return <Users className="h-4 w-4 mr-2 text-muted-foreground" />; // For 'Outra'
+    default: return <Users className="h-4 w-4 mr-2 text-muted-foreground" />; 
   }
 };
 
 
 export const getColumns = (
-  onArchive: (id: string) => void
+  onArchive: (id: string) => void,
+  user: User | null // Accept user as a parameter
 ): ColumnDef<Community>[] => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { user } = useAuth(); 
-
   return [
     {
       accessorKey: "name",
@@ -55,7 +54,7 @@ export const getColumns = (
       accessorKey: "category",
       header: "Categoria",
       cell: ({ row }) => {
-        const category = row.getValue("category") as CommunityCategoryPT; // Updated type
+        const category = row.getValue("category") as CommunityCategoryPT; 
         return (
           <Badge variant="secondary" className="flex items-center w-fit">
             <CategoryIcon category={category} />
