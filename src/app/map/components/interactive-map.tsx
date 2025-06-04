@@ -18,9 +18,9 @@ interface InteractiveMapProps {
 }
 
 const BRAZIL_CENTER: L.LatLngExpression = [-14.2350, -51.9253];
-const INITIAL_ZOOM = 4; // Zoom inicial para mostrar o Brasil
-const MIN_ZOOM_LEVEL = 4; // Zoom mínimo para manter o foco no Brasil
-const MAX_ZOOM_LEVEL = 13; // Zoom máximo para evitar detalhes de rua/bairro
+const INITIAL_ZOOM = 4; 
+const MIN_ZOOM_LEVEL = 4; // Mantém o foco no Brasil
+const MAX_ZOOM_LEVEL = 9; // Nível máximo de zoom para visualização de estados/cidades maiores
 
 export default function InteractiveMap({ communities }: InteractiveMapProps) {
   const [iconsReady, setIconsReady] = useState(false);
@@ -31,15 +31,11 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
       .catch(err => console.error("Failed to load leaflet-defaulticon-compatibility for InteractiveMap", err));
   }, []);
 
-  // Define o centro do mapa: se houver comunidades, usa a primeira; senão, o centro do Brasil.
   const mapCenter = communities.length > 0 && typeof communities[0].latitude === 'number' && typeof communities[0].longitude === 'number'
     ? [communities[0].latitude, communities[0].longitude] as L.LatLngExpression
     : BRAZIL_CENTER;
   
-  // Se há comunidades, o zoom inicial pode ser um pouco maior que o do Brasil inteiro.
-  // Caso contrário, mantém o zoom inicial para o Brasil.
   const currentInitialZoom = communities.length > 0 ? Math.max(INITIAL_ZOOM, 5) : INITIAL_ZOOM;
-
 
   return (
     <MapContainer 
@@ -56,7 +52,7 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {iconsReady && communities.map((community) => (
-        typeof community.latitude === 'number' && typeof community.longitude === 'number' && (
+        community.latitude != null && community.longitude != null && ( // Check for null or undefined
           <Marker key={community.id} position={[community.latitude, community.longitude]}>
             <Popup minWidth={220}>
                <Card className="w-full shadow-none border-none rounded-md">
@@ -80,4 +76,3 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
     </MapContainer>
   );
 }
-
