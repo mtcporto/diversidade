@@ -23,10 +23,7 @@ const DEFAULT_ZOOM = 4;
 
 export default function InteractiveMap({ communities }: InteractiveMapProps) {
   useEffect(() => {
-    // Dynamically import for side effects on client, only when window is available
-    if (typeof window !== "undefined") {
-        import('leaflet-defaulticon-compatibility');
-    }
+    import('leaflet-defaulticon-compatibility');
   }, []); // Empty dependency array, runs once on mount
 
   const mapCenter = communities.length > 0 && communities[0].latitude && communities[0].longitude

@@ -16,10 +16,7 @@ interface CommunityMiniMapProps {
 
 export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapProps) {
   useEffect(() => {
-    // Dynamically import for side effects on client, only when window is available
-    if (typeof window !== "undefined") {
-        import('leaflet-defaulticon-compatibility');
-    }
+    import('leaflet-defaulticon-compatibility');
   }, []); // Empty dependency array, runs once on mount
 
   const position: L.LatLngExpression = [lat, lng];
