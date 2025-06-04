@@ -2,11 +2,11 @@
 "use client";
 
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'; // Changed from .webpack.css
-// import 'leaflet-defaulticon-compatibility'; // Removed from top-level
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+// import 'leaflet-defaulticon-compatibility'; // Side effect import handled in useEffect
 import type * as L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react'; // Removed useState
 
 interface CommunityMiniMapProps {
   lat: number;
@@ -15,31 +15,20 @@ interface CommunityMiniMapProps {
 }
 
 export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapProps) {
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    setIsClient(true);
     // Dynamically import for side effects on client, only when window is available
     if (typeof window !== "undefined") {
         import('leaflet-defaulticon-compatibility');
     }
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="flex items-center justify-center h-full bg-muted text-muted-foreground p-4 text-center text-sm">
-        Carregando mapa...
-      </div>
-    );
-  }
+  }, []); // Empty dependency array, runs once on mount
 
   const position: L.LatLngExpression = [lat, lng];
 
   return (
-    <MapContainer 
-        center={position} 
-        zoom={13} 
-        scrollWheelZoom={false} 
+    <MapContainer
+        center={position}
+        zoom={13}
+        scrollWheelZoom={false}
         style={{ height: '100%', width: '100%' }}
         attributionControl={false}
         zoomControl={false}

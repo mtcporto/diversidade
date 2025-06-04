@@ -2,13 +2,13 @@
 "use client";
 
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'; // Changed from .webpack.css
-// import 'leaflet-defaulticon-compatibility'; // Removed from top-level
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+// import 'leaflet-defaulticon-compatibility'; // Side effect import handled in useEffect
 import type * as L from 'leaflet';
 
 import type { Community } from '@/types';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react'; // Removed useState
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,24 +22,13 @@ const BRAZIL_CENTER: L.LatLngExpression = [-14.2350, -51.9253];
 const DEFAULT_ZOOM = 4;
 
 export default function InteractiveMap({ communities }: InteractiveMapProps) {
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    setIsClient(true);
     // Dynamically import for side effects on client, only when window is available
     if (typeof window !== "undefined") {
         import('leaflet-defaulticon-compatibility');
     }
-  }, []);
+  }, []); // Empty dependency array, runs once on mount
 
-  if (!isClient) {
-    return (
-      <div className="flex items-center justify-center h-full bg-muted text-muted-foreground p-4 text-center text-sm rounded-lg">
-        Carregando mapa interativo...
-      </div>
-    );
-  }
-  
   const mapCenter = communities.length > 0 && communities[0].latitude && communities[0].longitude
     ? [communities[0].latitude, communities[0].longitude] as L.LatLngExpression
     : BRAZIL_CENTER;
