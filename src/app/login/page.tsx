@@ -11,7 +11,8 @@ import { LogIn, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation"; // Importação adicionada
+import { useRouter } from "next/navigation";
+import { useEffect } from "react"; // Import useEffect
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Por favor, insira um email válido." }),
@@ -44,10 +45,16 @@ export default function LoginPage() {
     },
   });
 
-  if (user) {
-    router.push('/'); 
+  useEffect(() => {
+    if (user) {
+      router.push('/'); 
+    }
+  }, [user, router]);
+
+  if (user && !loading) { // Still return null if user exists to prevent rendering the form briefly
     return null;
   }
+
 
   const onSubmit = async (data: LoginFormValues) => {
     await signInWithEmail(data.email, data.password);
