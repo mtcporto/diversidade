@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
@@ -11,18 +12,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ArrowUpDown, MoreHorizontal, Eye, Edit3, Archive as ArchiveIcon, Users, MapPin, Palette } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Eye, Edit3, Archive as ArchiveIcon, Users, MapPin, Palette, TreePine, Building } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
 const CategoryIcon = ({ category }: { category: Community['category'] }) => {
   switch (category) {
-    case 'Indigenous': return <Users className="h-4 w-4 mr-2 text-red-600" />;
-    case 'Quilombola': return <Users className="h-4 w-4 mr-2 text-purple-600" />;
-    case 'Artisans': return <Palette className="h-4 w-4 mr-2 text-orange-600" />;
-    case 'Agricultural': return <Users className="h-4 w-4 mr-2 text-green-600" />; // Using Users, can be specific later
-    case 'Cultural': return <Palette className="h-4 w-4 mr-2 text-blue-600" />;
-    default: return <MapPin className="h-4 w-4 mr-2 text-gray-500" />;
+    case 'Indigenous': return <Users className="h-4 w-4 mr-2 text-primary" />;
+    case 'Quilombola': return <Users className="h-4 w-4 mr-2 text-primary" />;
+    case 'Artisans': return <Palette className="h-4 w-4 mr-2 text-accent" />;
+    case 'Agricultural': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
+    case 'Cultural': return <Building className="h-4 w-4 mr-2 text-accent" />;
+    case 'Environmental': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
+    default: return <Users className="h-4 w-4 mr-2 text-muted-foreground" />;
   }
 };
 
@@ -100,7 +102,7 @@ export const getColumns = (
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onArchive(community.id)} className="text-destructive cursor-pointer">
+            <DropdownMenuItem onClick={() => onArchive(community.id)} className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer">
               <ArchiveIcon className="mr-2 h-4 w-4" /> Arquivar
             </DropdownMenuItem>
           </DropdownMenuContent>

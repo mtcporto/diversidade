@@ -1,3 +1,4 @@
+
 import { getCommunityById } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,18 +6,30 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, Globe, MapPin, Edit3, Users, Palette, TreePine, Building } from 'lucide-react';
-import CommunityMiniMap from '../components/community-mini-map';
+// import CommunityMiniMap from '../components/community-mini-map'; // Original import
 import type { CommunityCategory } from '@/types';
+import dynamic from 'next/dynamic';
+import type { ComponentType } from 'react';
+
+// Dynamically import CommunityMiniMap with SSR turned off
+const CommunityMiniMap: ComponentType<{ lat: number; lng: number; name: string }> = dynamic(
+  () => import('../components/community-mini-map'),
+  { 
+    ssr: false,
+    loading: () => <div className="flex items-center justify-center h-64 bg-muted text-muted-foreground p-4 text-center text-sm rounded-md border border-border shadow-sm">Carregando mini mapa...</div>
+  }
+);
+
 
 const CategoryDisplay = ({ category }: { category: CommunityCategory }) => {
   const iconMap: Record<CommunityCategory, React.ReactNode> = {
-    Indigenous: <Users className="mr-2 h-5 w-5 text-red-500" />,
-    Quilombola: <Users className="mr-2 h-5 w-5 text-purple-500" />,
-    Artisans: <Palette className="mr-2 h-5 w-5 text-orange-500" />,
-    Agricultural: <TreePine className="mr-2 h-5 w-5 text-green-500" />,
-    Cultural: <Building className="mr-2 h-5 w-5 text-blue-500" />,
-    Environmental: <TreePine className="mr-2 h-5 w-5 text-teal-500" />,
-    Other: <Users className="mr-2 h-5 w-5 text-gray-500" />,
+    Indigenous: <Users className="mr-2 h-5 w-5 text-primary" />, // Updated color to use primary/accent
+    Quilombola: <Users className="mr-2 h-5 w-5 text-primary" />,
+    Artisans: <Palette className="mr-2 h-5 w-5 text-accent" />,
+    Agricultural: <TreePine className="mr-2 h-5 w-5 text-primary" />,
+    Cultural: <Building className="mr-2 h-5 w-5 text-accent" />,
+    Environmental: <TreePine className="mr-2 h-5 w-5 text-primary" />,
+    Other: <Users className="mr-2 h-5 w-5 text-muted-foreground" />, // Kept muted for 'Other'
   };
   return (
     <div className="flex items-center text-lg">
@@ -41,8 +54,8 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
             <Image
               src={community.imageUrl}
               alt={`Imagem de ${community.name}`}
-              layout="fill"
-              objectFit="cover"
+              fill // Changed from layout="fill" objectFit="cover" to just fill for Next 13+
+              style={{ objectFit: 'cover' }} // Added style for objectFit
               data-ai-hint="community photo"
             />
           </div>
@@ -112,7 +125,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
 
         </CardContent>
         <CardFooter className="border-t pt-6">
-          <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent/10">
+          <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent/10 hover:text-accent">
             <Link href={`/communities/${community.id}/edit`}>
               <Edit3 className="mr-2 h-5 w-5" /> Editar Comunidade
             </Link>
