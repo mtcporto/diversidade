@@ -1,8 +1,9 @@
+
 "use client";
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'; // Changed from .webpack.css
-import 'leaflet-defaulticon-compatibility';
+// import 'leaflet-defaulticon-compatibility'; // Removed from top-level
 import type * as L from 'leaflet';
 
 import type { Community } from '@/types';
@@ -25,6 +26,10 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
 
   useEffect(() => {
     setIsClient(true);
+    // Dynamically import for side effects on client, only when window is available
+    if (typeof window !== "undefined") {
+        import('leaflet-defaulticon-compatibility');
+    }
   }, []);
 
   if (!isClient) {

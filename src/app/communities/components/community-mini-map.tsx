@@ -1,8 +1,9 @@
+
 "use client";
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'; // Changed from .webpack.css
-import 'leaflet-defaulticon-compatibility';
+// import 'leaflet-defaulticon-compatibility'; // Removed from top-level
 import type * as L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import React, { useState, useEffect } from 'react';
@@ -18,6 +19,10 @@ export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapPro
 
   useEffect(() => {
     setIsClient(true);
+    // Dynamically import for side effects on client, only when window is available
+    if (typeof window !== "undefined") {
+        import('leaflet-defaulticon-compatibility');
+    }
   }, []);
 
   if (!isClient) {
