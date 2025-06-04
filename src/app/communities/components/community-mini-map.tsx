@@ -1,6 +1,11 @@
 "use client";
 
-import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+import 'leaflet-defaulticon-compatibility';
+import type * as L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useState, useEffect } from 'react';
 
 interface CommunityMiniMapProps {
   lat: number;
@@ -8,32 +13,41 @@ interface CommunityMiniMapProps {
   name: string;
 }
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "YOUR_GOOGLE_MAPS_API_KEY_HERE";
-
 export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapProps) {
-  
-  if (!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === "YOUR_GOOGLE_MAPS_API_KEY_HERE") {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
     return (
       <div className="flex items-center justify-center h-full bg-muted text-muted-foreground p-4 text-center text-sm">
-        Mapa indisponível. Configure a chave da API do Google Maps.
+        Carregando mapa...
       </div>
     );
   }
-  
+
+  const position: L.LatLngExpression = [lat, lng];
+
   return (
-    <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
-      <Map
-        center={{ lat, lng }}
-        zoom={13}
-        gestureHandling={'none'} // Disable all interactions
-        disableDefaultUI={true}
-        mapId={`miniMap-${name.replace(/\s+/g, '-')}`} // Unique mapId
-        className="w-full h-full"
-      >
-        <AdvancedMarker position={{ lat, lng }} title={name}>
-           <Pin background={'#2E8B57'} glyphColor={'#FFFFFF'} borderColor={'#D4A22B'} />
-        </AdvancedMarker>
-      </Map>
-    </APIProvider>
+    <MapContainer 
+        center={position} 
+        zoom={13} 
+        scrollWheelZoom={false} 
+        style={{ height: '100%', width: '100%' }}
+        attributionControl={false}
+        zoomControl={false}
+        className="rounded-md"
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={position}>
+        <Popup>
+          {name}
+        </Popup>
+      </Marker>
+    </MapContainer>
   );
 }
