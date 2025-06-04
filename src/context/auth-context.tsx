@@ -43,6 +43,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleAuthError = (error: FirebaseError, defaultMessage: string) => {
     console.error("Authentication error:", error);
+
+    // If user closes the popup, don't show a toast.
+    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      return;
+    }
+
     let message = defaultMessage;
     if (error.code === 'auth/email-already-in-use') {
       message = 'Este email já está em uso.';
@@ -51,6 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else if (error.code === 'auth/weak-password') {
       message = 'A senha é muito fraca. Use pelo menos 6 caracteres.';
     }
+    
     toast({
       title: "Erro de Autenticação",
       description: message,
