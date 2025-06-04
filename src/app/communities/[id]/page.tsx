@@ -6,30 +6,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, Globe, MapPin, Edit3, Users, Palette, TreePine, Building } from 'lucide-react';
-// import CommunityMiniMap from '../components/community-mini-map'; // Original import
 import type { CommunityCategory } from '@/types';
-import dynamic from 'next/dynamic';
-import type { ComponentType } from 'react';
-
-// Dynamically import CommunityMiniMap with SSR turned off
-const CommunityMiniMap: ComponentType<{ lat: number; lng: number; name: string }> = dynamic(
-  () => import('../components/community-mini-map'),
-  { 
-    ssr: false,
-    loading: () => <div className="flex items-center justify-center h-64 bg-muted text-muted-foreground p-4 text-center text-sm rounded-md border border-border shadow-sm">Carregando mini mapa...</div>
-  }
-);
+import MiniMapClientLoader from '../components/mini-map-client-loader'; // Updated import
 
 
 const CategoryDisplay = ({ category }: { category: CommunityCategory }) => {
   const iconMap: Record<CommunityCategory, React.ReactNode> = {
-    Indigenous: <Users className="mr-2 h-5 w-5 text-primary" />, // Updated color to use primary/accent
+    Indigenous: <Users className="mr-2 h-5 w-5 text-primary" />,
     Quilombola: <Users className="mr-2 h-5 w-5 text-primary" />,
     Artisans: <Palette className="mr-2 h-5 w-5 text-accent" />,
     Agricultural: <TreePine className="mr-2 h-5 w-5 text-primary" />,
     Cultural: <Building className="mr-2 h-5 w-5 text-accent" />,
     Environmental: <TreePine className="mr-2 h-5 w-5 text-primary" />,
-    Other: <Users className="mr-2 h-5 w-5 text-muted-foreground" />, // Kept muted for 'Other'
+    Other: <Users className="mr-2 h-5 w-5 text-muted-foreground" />,
   };
   return (
     <div className="flex items-center text-lg">
@@ -54,8 +43,8 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
             <Image
               src={community.imageUrl}
               alt={`Imagem de ${community.name}`}
-              fill // Changed from layout="fill" objectFit="cover" to just fill for Next 13+
-              style={{ objectFit: 'cover' }} // Added style for objectFit
+              fill
+              style={{ objectFit: 'cover' }}
               data-ai-hint="community photo"
             />
           </div>
@@ -81,7 +70,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
               </div>
               {community.latitude && community.longitude && (
                 <div className="h-64 rounded-md overflow-hidden border border-border shadow-sm">
-                   <CommunityMiniMap lat={community.latitude} lng={community.longitude} name={community.name} />
+                   <MiniMapClientLoader lat={community.latitude} lng={community.longitude} name={community.name} />
                 </div>
               )}
             </div>
