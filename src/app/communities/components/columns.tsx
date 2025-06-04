@@ -1,8 +1,7 @@
-
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Community } from "@/types";
+import type { Community, CommunityCategoryPT } from "@/types"; // Updated import
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,17 +14,17 @@ import {
 import { ArrowUpDown, MoreHorizontal, Eye, Edit3, Archive as ArchiveIcon, Users, Palette, TreePine, Building } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/context/auth-context"; // Import useAuth
+import { useAuth } from "@/context/auth-context"; 
 
-const CategoryIcon = ({ category }: { category: Community['category'] }) => {
+const CategoryIcon = ({ category }: { category: CommunityCategoryPT }) => { // Updated type
   switch (category) {
-    case 'Indigenous': return <Users className="h-4 w-4 mr-2 text-primary" />;
+    case 'Indígena': return <Users className="h-4 w-4 mr-2 text-primary" />;
     case 'Quilombola': return <Users className="h-4 w-4 mr-2 text-primary" />;
-    case 'Artisans': return <Palette className="h-4 w-4 mr-2 text-accent" />;
-    case 'Agricultural': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
+    case 'Artesãos': return <Palette className="h-4 w-4 mr-2 text-accent" />;
+    case 'Agrícola': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
     case 'Cultural': return <Building className="h-4 w-4 mr-2 text-accent" />;
-    case 'Environmental': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
-    default: return <Users className="h-4 w-4 mr-2 text-muted-foreground" />;
+    case 'Ambiental': return <TreePine className="h-4 w-4 mr-2 text-primary" />;
+    default: return <Users className="h-4 w-4 mr-2 text-muted-foreground" />; // For 'Outra'
   }
 };
 
@@ -34,7 +33,7 @@ export const getColumns = (
   onArchive: (id: string) => void
 ): ColumnDef<Community>[] => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { user } = useAuth(); // Use useAuth hook
+  const { user } = useAuth(); 
 
   return [
     {
@@ -56,7 +55,7 @@ export const getColumns = (
       accessorKey: "category",
       header: "Categoria",
       cell: ({ row }) => {
-        const category = row.getValue("category") as Community['category'];
+        const category = row.getValue("category") as CommunityCategoryPT; // Updated type
         return (
           <Badge variant="secondary" className="flex items-center w-fit">
             <CategoryIcon category={category} />
@@ -101,7 +100,7 @@ export const getColumns = (
                   <Eye className="mr-2 h-4 w-4" /> Ver Detalhes
                 </Link>
               </DropdownMenuItem>
-              {user && ( // Conditionally render based on user login
+              {user && ( 
                 <>
                   <DropdownMenuItem asChild>
                     <Link href={`/communities/${community.id}/edit`} className="cursor-pointer">

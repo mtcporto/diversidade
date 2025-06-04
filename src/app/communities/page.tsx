@@ -1,9 +1,9 @@
 
 import { PlusCircle } from 'lucide-react';
 import { getCommunities } from '@/lib/data';
-import type { CommunityCategory } from '@/types';
+import type { CommunityCategoryPT } from '@/types'; // Updated import
 import CommunityTable from './components/community-table';
-import AddCommunityButton from './components/add-community-button'; // Import the client component
+import AddCommunityButton from './components/add-community-button'; 
 
 export default async function CommunitiesPage({
   searchParams,
@@ -11,7 +11,7 @@ export default async function CommunitiesPage({
   searchParams?: {
     query?: string;
     page?: string;
-    category?: CommunityCategory;
+    category?: CommunityCategoryPT; // Updated type
   };
 }) {
   const query = searchParams?.query || '';
@@ -24,7 +24,7 @@ export default async function CommunitiesPage({
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-headline text-primary">Comunidades Registradas</h1>
-        <AddCommunityButton /> {/* Use the client component */}
+        <AddCommunityButton /> 
       </div>
       <CommunityTable
         initialCommunities={communities}

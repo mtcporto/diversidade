@@ -1,14 +1,14 @@
-export type CommunityCategory = 'Indigenous' | 'Quilombola' | 'Artisans' | 'Agricultural' | 'Cultural' | 'Environmental' | 'Other';
+export type CommunityCategoryPT = 'Indígena' | 'Quilombola' | 'Artesãos' | 'Agrícola' | 'Cultural' | 'Ambiental' | 'Outra';
 
-export const communityCategories: CommunityCategory[] = [
-  'Indigenous', 'Quilombola', 'Artisans', 'Agricultural', 'Cultural', 'Environmental', 'Other'
+export const communityCategoriesPT: CommunityCategoryPT[] = [
+  'Indígena', 'Quilombola', 'Artesãos', 'Agrícola', 'Cultural', 'Ambiental', 'Outra'
 ];
 
 export interface Community {
   id: string;
   name: string;
   description: string;
-  category: CommunityCategory;
+  category: CommunityCategoryPT; // Updated to Portuguese type
   address: string;
   latitude: number;
   longitude: number;
@@ -19,4 +19,5 @@ export interface Community {
   createdAt: string; 
   updatedAt: string; 
   isActive: boolean; 
+  pexelsQueryUsed?: string; // Optional: store Pexels query
 }

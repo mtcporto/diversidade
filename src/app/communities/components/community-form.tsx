@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { communitySchema, type CommunityFormData } from "@/lib/schema";
 import type { Community } from "@/types";
-import { communityCategories } from "@/types";
+import { communityCategoriesPT } from "@/types"; // Updated import
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -47,7 +47,7 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
     } : {
       name: "",
       description: "",
-      category: undefined,
+      category: undefined, // Updated for Portuguese categories
       address: "",
       latitude: 0,
       longitude: 0,
@@ -83,14 +83,14 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
   const formFields = [
     { name: "name" as const, label: "Nome da Comunidade", placeholder: "Ex: Aldeia Pataxó Nova Vida", icon: Users, description: "O nome oficial da comunidade ou organização." },
     { name: "description" as const, label: "Descrição", placeholder: "Descreva a comunidade, sua missão, atividades...", icon: FileText, type: "textarea", description: "Um resumo sobre a comunidade, suas atividades principais e história." },
-    { name: "category" as const, label: "Categoria", placeholder: "Selecione uma categoria", icon: Tag, type: "select", options: communityCategories, description: "Classifique o tipo principal da comunidade." },
+    { name: "category" as const, label: "Categoria", placeholder: "Selecione uma categoria", icon: Tag, type: "select", options: communityCategoriesPT, description: "Classifique o tipo principal da comunidade." }, // Updated options
     { name: "address" as const, label: "Endereço Completo", placeholder: "Ex: Rua Principal, 123, Vila Esperança, Cidade - Estado", icon: MapPin, description: "O endereço físico principal da comunidade." },
     { name: "latitude" as const, label: "Latitude", placeholder: "Ex: -19.916681", type: "number", icon: MapPin, description: "Coordenada geográfica (decimal). Use '.' como separador." },
     { name: "longitude" as const, label: "Longitude", placeholder: "Ex: -43.934493", type: "number", icon: MapPin, description: "Coordenada geográfica (decimal). Use '.' como separador." },
     { name: "contactEmail" as const, label: "Email de Contato", placeholder: "contato@comunidade.org", type: "email", icon: Mail, description: "Email principal para contato." },
     { name: "contactPhone" as const, label: "Telefone de Contato", placeholder: "(XX) XXXXX-XXXX", icon: Phone, description: "Telefone principal para contato." },
     { name: "website" as const, label: "Website/Rede Social", placeholder: "https://comunidade.org", type: "url", icon: Globe, description: "Link para o site oficial ou perfil em rede social." },
-    { name: "imageUrl" as const, label: "URL da Imagem de Destaque", placeholder: "https://linkdaimagem.com/foto.jpg", type: "url", icon: ImageIcon, description: "Um link para uma imagem representativa da comunidade." },
+    { name: "imageUrl" as const, label: "URL da Imagem de Destaque", placeholder: "https://linkdaimagem.com/foto.jpg (Opcional, será buscada automaticamente se vazia)", type: "url", icon: ImageIcon, description: "Link para imagem representativa. Se deixado em branco, uma imagem será buscada automaticamente." },
   ];
 
   return (

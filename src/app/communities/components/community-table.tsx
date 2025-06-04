@@ -1,7 +1,7 @@
 "use client";
 
-import type { Community, CommunityCategory } from "@/types";
-import { communityCategories } from "@/types";
+import type { Community, CommunityCategoryPT } from "@/types"; // Updated import
+import { communityCategoriesPT } from "@/types"; // Updated import
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -45,7 +45,7 @@ interface CommunityTableProps {
   initialTotalCount: number;
   initialPage: number;
   searchQuery?: string;
-  searchCategory?: CommunityCategory;
+  searchCategory?: CommunityCategoryPT; // Updated type
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -70,7 +70,7 @@ export default function CommunityTable({
   const [totalCount, setTotalCount] = useState(initialTotalCount);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState(initialSearchQuery);
-  const [categoryFilter, setCategoryFilter] = useState<CommunityCategory | undefined>(initialSearchCategory);
+  const [categoryFilter, setCategoryFilter] = useState<CommunityCategoryPT | undefined>(initialSearchCategory); // Updated type
   
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -120,7 +120,7 @@ export default function CommunityTable({
     globalFilterFn: fuzzyFilter,
   });
 
-  const fetchData = async (page: number, term: string, category?: CommunityCategory) => {
+  const fetchData = async (page: number, term: string, category?: CommunityCategoryPT) => { // Updated type
     const { communities: newCommunities, totalCount: newTotalCount } = await getCommunities(term, category, page, pageSize);
     setCommunities(newCommunities);
     setTotalCount(newTotalCount);
@@ -134,10 +134,9 @@ export default function CommunityTable({
   };
 
   useEffect(() => {
-    // Sync state with URL params on initial load or if they change externally
     const urlPage = Number(searchParams.get('page')) || 1;
     const urlQuery = searchParams.get('query') || '';
-    const urlCategory = searchParams.get('category') as CommunityCategory | undefined;
+    const urlCategory = searchParams.get('category') as CommunityCategoryPT | undefined; // Updated type
 
     if (urlPage !== currentPage || urlQuery !== searchTerm || urlCategory !== categoryFilter) {
       setCurrentPage(urlPage);
@@ -155,7 +154,7 @@ export default function CommunityTable({
   };
 
   const handleCategoryChange = (value: string) => {
-    const newCategory = value === "all" ? undefined : value as CommunityCategory;
+    const newCategory = value === "all" ? undefined : value as CommunityCategoryPT; // Updated type
     setCategoryFilter(newCategory);
     fetchData(1, searchTerm, newCategory);
   };
@@ -185,7 +184,7 @@ export default function CommunityTable({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as Categorias</SelectItem>
-            {communityCategories.map(cat => (
+            {communityCategoriesPT.map(cat => ( // Updated array
               <SelectItem key={cat} value={cat}>{cat}</SelectItem>
             ))}
           </SelectContent>

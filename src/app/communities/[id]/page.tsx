@@ -4,19 +4,19 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Mail, Phone, Globe, MapPin, Users, Palette, TreePine, Building } from 'lucide-react';
-import type { CommunityCategory } from '@/types';
+import type { CommunityCategoryPT } from '@/types'; // Updated import
 import MiniMapClientLoader from '../components/mini-map-client-loader';
-import EditCommunityButton from '../components/edit-community-button'; // Import the client component
+import EditCommunityButton from '../components/edit-community-button'; 
 
-const CategoryDisplay = ({ category }: { category: CommunityCategory }) => {
-  const iconMap: Record<CommunityCategory, React.ReactNode> = {
-    Indigenous: <Users className="mr-2 h-5 w-5 text-primary" />,
-    Quilombola: <Users className="mr-2 h-5 w-5 text-primary" />,
-    Artisans: <Palette className="mr-2 h-5 w-5 text-accent" />,
-    Agricultural: <TreePine className="mr-2 h-5 w-5 text-primary" />,
-    Cultural: <Building className="mr-2 h-5 w-5 text-accent" />,
-    Environmental: <TreePine className="mr-2 h-5 w-5 text-primary" />,
-    Other: <Users className="mr-2 h-5 w-5 text-muted-foreground" />,
+const CategoryDisplay = ({ category }: { category: CommunityCategoryPT }) => { // Updated type
+  const iconMap: Record<CommunityCategoryPT, React.ReactNode> = {
+    'Indígena': <Users className="mr-2 h-5 w-5 text-primary" />,
+    'Quilombola': <Users className="mr-2 h-5 w-5 text-primary" />,
+    'Artesãos': <Palette className="mr-2 h-5 w-5 text-accent" />,
+    'Agrícola': <TreePine className="mr-2 h-5 w-5 text-primary" />,
+    'Cultural': <Building className="mr-2 h-5 w-5 text-accent" />,
+    'Ambiental': <TreePine className="mr-2 h-5 w-5 text-primary" />,
+    'Outra': <Users className="mr-2 h-5 w-5 text-muted-foreground" />,
   };
   return (
     <div className="flex items-center text-lg">
@@ -43,7 +43,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
               alt={`Imagem de ${community.name}`}
               fill
               style={{ objectFit: 'cover' }}
-              data-ai-hint="community photo"
+              data-ai-hint={community.pexelsQueryUsed || community.category.toLowerCase()} // Use Pexels query or category as hint
             />
           </div>
         )}
@@ -112,7 +112,7 @@ export default async function CommunityDetailPage({ params }: { params: { id: st
 
         </CardContent>
         <CardFooter className="border-t pt-6">
-          <EditCommunityButton communityId={community.id} /> {/* Use the client component */}
+          <EditCommunityButton communityId={community.id} /> 
         </CardFooter>
       </Card>
     </div>
