@@ -1,7 +1,7 @@
 "use client";
 
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'; // Changed from .webpack.css
 import 'leaflet-defaulticon-compatibility';
 import type * as L from 'leaflet';
 
