@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -27,7 +28,6 @@ import {
 import { createCommunity, updateCommunity } from "@/lib/data";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Image as ImageIcon, Mail, MapPin, Phone, Tag, Users, FileText } from "lucide-react";
 
 interface CommunityFormProps {
@@ -47,7 +47,7 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
     } : {
       name: "",
       description: "",
-      category: undefined, // Updated for Portuguese categories
+      category: undefined, 
       address: "",
       latitude: 0,
       longitude: 0,
@@ -66,15 +66,32 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
         router.push(`/communities/${existingCommunity.id}`);
       } else {
         const newCommunity = await createCommunity(data);
+        // Log the created community and its ID for debugging
+        console.log("Community created:", newCommunity); 
+
+        if (!newCommunity || !newCommunity.id) {
+          console.error("Error: newCommunity or newCommunity.id is undefined after creation.", {
+            formData: data,
+            returnedCommunity: newCommunity,
+          });
+          toast({
+            title: "Erro na Criação",
+            description: "Não foi possível obter o ID da nova comunidade. A comunidade pode não ter sido salva. Verifique o console para mais detalhes.",
+            variant: "destructive",
+          });
+          return; // Prevent further action if ID is missing
+        }
+        
         toast({ title: "Sucesso!", description: "Comunidade criada com sucesso." });
+        console.log(`Redirecting to: /communities/${newCommunity.id}`);
         router.push(`/communities/${newCommunity.id}`);
       }
-      router.refresh(); // Refresh server components
+      router.refresh(); 
     } catch (error) {
-      console.error("Failed to save community:", error);
+      console.error("Failed to save community in onSubmit:", error);
       toast({
-        title: "Erro",
-        description: "Falha ao salvar comunidade. Tente novamente.",
+        title: "Erro ao Salvar",
+        description: "Falha ao salvar comunidade. Verifique o console e tente novamente.",
         variant: "destructive",
       });
     }
@@ -83,7 +100,7 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
   const formFields = [
     { name: "name" as const, label: "Nome da Comunidade", placeholder: "Ex: Aldeia Pataxó Nova Vida", icon: Users, description: "O nome oficial da comunidade ou organização." },
     { name: "description" as const, label: "Descrição", placeholder: "Descreva a comunidade, sua missão, atividades...", icon: FileText, type: "textarea", description: "Um resumo sobre a comunidade, suas atividades principais e história." },
-    { name: "category" as const, label: "Categoria", placeholder: "Selecione uma categoria", icon: Tag, type: "select", options: communityCategoriesPT, description: "Classifique o tipo principal da comunidade." }, // Updated options
+    { name: "category" as const, label: "Categoria", placeholder: "Selecione uma categoria", icon: Tag, type: "select", options: communityCategoriesPT, description: "Classifique o tipo principal da comunidade." },
     { name: "address" as const, label: "Endereço Completo", placeholder: "Ex: Rua Principal, 123, Vila Esperança, Cidade - Estado", icon: MapPin, description: "O endereço físico principal da comunidade." },
     { name: "latitude" as const, label: "Latitude", placeholder: "Ex: -19.916681", type: "number", icon: MapPin, description: "Coordenada geográfica (decimal). Use '.' como separador." },
     { name: "longitude" as const, label: "Longitude", placeholder: "Ex: -43.934493", type: "number", icon: MapPin, description: "Coordenada geográfica (decimal). Use '.' como separador." },
@@ -128,7 +145,7 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
                       type={fieldInfo.type || "text"}
                       placeholder={fieldInfo.placeholder}
                       {...field}
-                      value={field.value ?? ""} // Ensure value is not undefined for input
+                      value={field.value ?? ""} 
                       className="focus:ring-accent focus:border-accent"
                       step={ (fieldInfo.name === 'latitude' || fieldInfo.name === 'longitude') ? "any" : undefined }
                     />
@@ -149,3 +166,4 @@ export default function CommunityForm({ existingCommunity }: CommunityFormProps)
     </Form>
   );
 }
+    
