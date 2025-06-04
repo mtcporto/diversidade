@@ -3,10 +3,9 @@
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-// import 'leaflet-defaulticon-compatibility'; // Side effect import handled in useEffect
 import type * as L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import React, { useEffect } from 'react'; // Removed useState
+import React, { useEffect, useState } from 'react';
 
 interface CommunityMiniMapProps {
   lat: number;
@@ -15,9 +14,13 @@ interface CommunityMiniMapProps {
 }
 
 export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapProps) {
+  const [iconsReady, setIconsReady] = useState(false);
+
   useEffect(() => {
-    import('leaflet-defaulticon-compatibility');
-  }, []); // Empty dependency array, runs once on mount
+    import('leaflet-defaulticon-compatibility')
+      .then(() => setIconsReady(true))
+      .catch(err => console.error("Failed to load leaflet-defaulticon-compatibility for MiniMap", err));
+  }, []);
 
   const position: L.LatLngExpression = [lat, lng];
 
@@ -34,11 +37,13 @@ export default function CommunityMiniMap({ lat, lng, name }: CommunityMiniMapPro
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={position}>
-        <Popup>
-          {name}
-        </Popup>
-      </Marker>
+      {iconsReady && (
+        <Marker position={position}>
+          <Popup>
+            {name}
+          </Popup>
+        </Marker>
+      )}
     </MapContainer>
   );
 }

@@ -3,12 +3,11 @@
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-// import 'leaflet-defaulticon-compatibility'; // Side effect import handled in useEffect
 import type * as L from 'leaflet';
 
 import type { Community } from '@/types';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import React, { useEffect } from 'react'; // Removed useState
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,11 +21,15 @@ const BRAZIL_CENTER: L.LatLngExpression = [-14.2350, -51.9253];
 const DEFAULT_ZOOM = 4;
 
 export default function InteractiveMap({ communities }: InteractiveMapProps) {
-  useEffect(() => {
-    import('leaflet-defaulticon-compatibility');
-  }, []); // Empty dependency array, runs once on mount
+  const [iconsReady, setIconsReady] = useState(false);
 
-  const mapCenter = communities.length > 0 && communities[0].latitude && communities[0].longitude
+  useEffect(() => {
+    import('leaflet-defaulticon-compatibility')
+      .then(() => setIconsReady(true))
+      .catch(err => console.error("Failed to load leaflet-defaulticon-compatibility for InteractiveMap", err));
+  }, []);
+
+  const mapCenter = communities.length > 0 && typeof communities[0].latitude === 'number' && typeof communities[0].longitude === 'number'
     ? [communities[0].latitude, communities[0].longitude] as L.LatLngExpression
     : BRAZIL_CENTER;
 
@@ -36,8 +39,8 @@ export default function InteractiveMap({ communities }: InteractiveMapProps) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {communities.map((community) => (
-        community.latitude && community.longitude && (
+      {iconsReady && communities.map((community) => (
+        typeof community.latitude === 'number' && typeof community.longitude === 'number' && (
           <Marker key={community.id} position={[community.latitude, community.longitude]}>
             <Popup minWidth={220}>
                <Card className="w-full shadow-none border-none rounded-md">
